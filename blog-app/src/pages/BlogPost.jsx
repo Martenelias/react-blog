@@ -1,6 +1,16 @@
 import BlogPostFetcher from '../components/BlogPostFetcher';
-import Comments from '../components/Comments';
 import { Link } from 'react-router-dom';
+import Comments from '../components/Comments';
+
+const avatarUrls = [
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+  'https://images.unsplash.com/photo-1502378735452-bc7d86632805',
+  'https://images.unsplash.com/photo-1544723795-3fb6469f5b39',
+  'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+  'https://images.unsplash.com/photo-1511367461989-f85a21fda167',
+];
+
+const getRandomAvatar = () => avatarUrls[Math.floor(Math.random() * avatarUrls.length)];
 
 const BlogPost = () => {
   return (
@@ -8,8 +18,14 @@ const BlogPost = () => {
       {({ post, loading, error }) => {
         if (loading) {
           return (
-            <div className='min-h-screen flex justify-center items-center bg-gradient-to-t from-gray-900 to-gray-500 transition-all duration-500 ease-in-out tracking-normal'>
-              <p className='bg-gradient-to-t from-gray-400 to-white rounded text-center p-20 text-3xl'>Laen andmeid...</p>
+            <div className='min-h-screen flex justify-center items-center bg-gradient-to-t from-gray-900 to-gray-500'>
+              <div className='flex items-center bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg'>
+                <svg className='animate-spin h-5 w-5 mr-3' viewBox='0 0 24 24'>
+                  <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4'></circle>
+                  <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8v8H4z'></path>
+                </svg>
+                Laen andmeid...
+              </div>
             </div>
           );
         }
@@ -23,16 +39,27 @@ const BlogPost = () => {
 
         const headersList = ['Veebiarendus', 'Disain', 'Projektijuhtimine', 'Karjäär', 'Eneseareng', 'Tehnoloogia', 'Tarkvaraarendus'];
         const randomHeader = headersList[Math.floor(Math.random() * headersList.length)];
+        const avatarUrl = getRandomAvatar();
 
         return (
-          <div className='min-h-screen flex justify-center items-center'>
-            <div className='bg-gradient-to-t from-gray-400 to-white my-20 p-4 w-11/12 md:w-3/4 lg:w-2/4 font-poppins rounded shadow-md shadow-black' key={post.id}>
-              <div className='flex justify-between items-center'>
-                <img className='rounded-full w-12' src={post.avatarUrl} alt='Avatar' />
-                <h3>{randomHeader}</h3>
+          <div className='min-h-screen py-10 pt-24 bg-blue-500'>
+            <div className='max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md shadow-black font-poppins'>
+              <div className='flex items-center space-x-4 mb-6'>
+                <img className='w-16 h-16 rounded-full object-cover' src={avatarUrl} alt='Author Avatar' />
+                <div>
+                  <h1 className='text-3xl font-semibold text-gray-800'>{randomHeader}</h1>
+                  <p className='text-gray-600'>by Tech Blogger</p>
+                </div>
               </div>
-              <p className='text-justify my-2 py-2 border-b border-t border-black'>{post.body}</p>
-              <Link className='text-xl md:text-2xl lg:text-3xl transition-all duration-500 ease-in-out tracking-normal hover:tracking-widest font-bold' to='/blogi'>Tagasi &#x21A9;</Link>
+              <div className='text-gray-700 space-y-4 leading-relaxed'>
+                <p>{post.body}</p>
+              </div>
+              <Link
+                className='inline-flex items-center mt-2 py-1 px-2 text-black-500 font-semibold rounded border border-blue-500 hover:bg-blue-500 text-sm'
+                to={'/blogi}'}
+              >
+                Tagasi
+              </Link>
               <Comments postId={post.id} />
             </div>
           </div>
@@ -41,5 +68,6 @@ const BlogPost = () => {
     </BlogPostFetcher>
   );
 };
+
 
 export default BlogPost;
